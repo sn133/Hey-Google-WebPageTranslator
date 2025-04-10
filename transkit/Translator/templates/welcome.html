@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Web Translator</title>
+    <link rel="stylesheet" href="{% static "style0.css" %}">
+</head>
+<body>
+<!--instead home give generate_order for payment -->
+<form method="post" action="{% url 'home' %}">
+    {% csrf_token %}
+    <header>
+        <h1>Welcome to Web Translator</h1>
+    </header>
+    <section>
+        <p>Translate your text easily with Web Translator. Start by entering your page url text in the input box and proceed with the translation.</p>
+        {% comment %} <a href="{% url 'generate_order' %}">Get Started</a> {% endcomment %}
+        <button type="submit">Get started</button>
+    </section>
+</form>
+<!-- Razorpay button -->
+<button type="button" id="razorpayButton" style="display: none;">Pay with Razorpay</button>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#translationForm').submit(function (event) {
+            event.preventDefault();
+
+            // Fetch form data
+            var url = $('#url-input').val();
+            var targetLanguage = $('#language-select').val();
+
+            // Perform translation logic here if needed
+
+            // Redirect to the Razorpay payment page
+            window.location.href = '{% url "generate_order" %}?url=' + encodeURIComponent(url) + '&targetLanguage=' + encodeURIComponent(targetLanguage);
+        });
+    });
+</script>
+
+</body>
+</html>

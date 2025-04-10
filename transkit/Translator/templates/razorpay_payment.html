@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Razorpay Payment</title>
+    <link rel="stylesheet" href="{% static "style5.css" %}">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> 
+</head>
+<body>
+
+<h1>Razorpay Payment</h1>
+
+{% comment %} <form id="razorpayForm" action="{% url 'process_razorpay_payment' %}" method="POST"> {% endcomment %}
+<form id="razorpayForm" action="{% url 'home' %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="order_id" value="{{ order_id }}">
+    <input type="hidden" name="order_amount" value="{{ order_amount }}">
+    <input type="hidden" name="order_currency" value="{{ order_currency }}">
+    <input type="hidden" name="api_key" value="{{ api_key }}">
+    
+    <!-- Add other necessary form fields here -->
+
+    <button type="submit" id="razorpaySubmitButton">Proceed to Pay</button>
+</form>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script> 
+<script>
+    $(document).ready(function () {
+        // Trigger Razorpay checkout when the form is submitted
+        $('#razorpayForm').submit(function (event) {
+            event.preventDefault();
+
+            // Fetch form data
+            var orderID = $('input[name="order_id"]').val();
+            var amount = $('input[name="order_amount"]').val();
+            var currency = $('input[name="order_currency"]').val();
+            var apiKey = $('input[name="api_key"]').val();
+
+            // Create a checkout object
+            var options = {
+                key: apiKey,
+                amount: amount,
+                currency: currency,
+                name: 'webque',
+                description: 'Payment for Translation Service',
+                order_id: orderID,
+                handler: function (response) {
+                    // Redirect to a success or failure page based on the response
+                    window.location.href = "{% url 'home' %}?razorpay_payment_id="+ response.razorpay_payment_id;
+                },
+                prefill: {
+                    name: 'User Name',
+                    email: 'user@example.com',
+                    contact: '1234567890'
+                },
+                notes: {
+                    // Add any additional notes if needed
+                    'merchant_order_id': 'your_custom_order_id'
+                },
+                theme: {
+                    color: '#F37254'
+                }
+            };
+
+            var rzp = new Razorpay(options);
+
+            // Open the checkout form
+            rzp.open();
+        });
+    });
+</script>
+
+</body>
+</html>

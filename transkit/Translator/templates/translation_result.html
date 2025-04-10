@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Result</title>
+    <link rel="stylesheet" href="{% static "style2.css" %}">
+</head>
+<body>
+{% comment %} <form method="post" action="{% url 'translate' %}">
+    {% csrf_token %} {% endcomment %}
+    <div class="container">
+        <div class="box">
+            <h1>Extracted Result</h1>
+            <h2>extracted text:</h2>
+            <p>{{ content_to_translate }}</p>
+            <p>{{ text_content }}</p>
+            <p>{{ paragraphs }}</p>
+        </div>
+        <div class="box">
+            <h1>Translation Result</h1>
+            <h2>Translated text:</h2>
+            <p>{{ translated_text }}</p>
+            {% comment %} <p>{{ translated_content.text }}</p> {% endcomment %}
+                {% if group_value %}
+                    <h2>Extracted Group Value:</h2>
+                    <p>{{ group_value }}</p> 
+                {% endif %} 
+            <a href="{% url 'home' %}">Go back</a> 
+        </div>
+    </div>
+{% comment %} </form> {% endcomment %}
+</body>
+</html>
+
+
+
+
+
+
